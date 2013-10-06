@@ -13,6 +13,7 @@ function Board(numCardTypes) {
     values.push(i);
   }
   values = shuffle(values);
+  console.log(values);
   
   this.values = values;
     
@@ -26,27 +27,41 @@ function Board(numCardTypes) {
 }
 
 function Game(board) {
-
-  var gameOver = false;
   var matchedCards = [];
+  var cardId1 = -1;
+  var cardId2 = -1;
+  
+  this.peek = function(cardId) {
+    var remaining = $.inArray(cardId, matchedCards) === -1 ? true : false;
 
-  function turn(i,j) {
-    if (board.match(i,j)) {
+    if (remaining) {
+      if (cardId1 === -1 && cardId2 === -1) {
+        cardId1 = cardId;
+      } else if (cardId2 === -1) {
+        cardId2 = cardId;
+        this.turn(cardId1, cardId2);
+      } 
+    }
+  }
+
+  this.turn = function(i, j) {
+    if (board.match(i, j)) {
+      console.log('match!');
       matchedCards.push(i);
       matchedCards.push(j);
     }
     if (matchedCards.length === board.numCards) {
-      gameOver = true;
+      this.gameOver()
     }
+    cardId1 = -1;
+    cardId2 = -1;
   }
 
-  this.peek = function(i) {
-    console.log(i);
+
+  this.gameOver = function() {
+      console.log('game over');
   }
 
-
-
-  console.log('game over');
 
 }
 
@@ -65,6 +80,16 @@ function CanvasBoard(board) {
   }
   $('#board').append(cards);
 }
+
+
+
+$( document ).ready(function() {
+  b = new Board(2);
+  c = new CanvasBoard(b);
+  game = new Game(b);
+});
+
+
 
 
 
