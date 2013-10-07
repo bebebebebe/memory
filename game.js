@@ -1,3 +1,9 @@
-// b = new Board(5);
-// c = new CanvasBoard(b);
-// g = new Game(b);
+$( document ).ready(function() {
+  b = new Board(2);
+  game = new Play(b);
+  //$(".card").bind("click", function(){console.log('clicked!!!');})
+});
+
+
+
+

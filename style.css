@@ -1,0 +1,10 @@
+#board {
+  text-align: center;
+  margin-top: 10%;
+}
+
+.card {
+  background: gray;
+  width: 50; 
+  height: 50;
+}
