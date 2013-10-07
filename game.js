@@ -1,7 +1,11 @@
 $( document ).ready(function() {
-  b = new Board(2);
-  game = new Play(b);
+  play();
+  //var b = new Board(8);
+  //game = new Game(b);
   //$(".card").bind("click", function(){console.log('clicked!!!');})
+
+  $('#reset').bind('click', reset)
+
 });
 
 

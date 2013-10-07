@@ -1,5 +1,5 @@
 
-function shuffle(o){ // from http://jsfromhell.com/array/shuffle by Jonas Raoni Soares Silva
+function shuffle(o){ // from http://jsfromhell.com/array/shuffle
     for(var j, x, i = o.length; i; j = Math.floor(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
     return o;
 }
@@ -25,7 +25,7 @@ function Board(numCardTypes) {
   }
 }
 
-function Play(board) {
+function Game(board) {
 
   var canvas = new CanvasBoard(board);
   function canvasCard(cardId) {
@@ -46,12 +46,12 @@ function Play(board) {
       } else if (cardId2 === -1 && cardId !== cardId1) {
         cardId2 = cardId;
         show(cardId2);
-        this.turn(cardId1, cardId2);
+        turn(cardId1, cardId2);
       } 
     }
   }
 
-  this.turn = function(i, j) {
+  turn = function(i, j) {
     if (board.match(i, j)) {
       matchedCards.push(i);
       matchedCards.push(j);
@@ -71,6 +71,7 @@ function Play(board) {
     }
     cardId1 = -1;
     cardId2 = -1;
+    
   }
 
   show = function(id) {
@@ -92,8 +93,9 @@ function Play(board) {
 }
 
 function CanvasBoard(board) {
-  var cardsString = '';
   var numCols = Math.floor(Math.sqrt(board.numCards));
+  
+  var cardsString = '';
   var cards = [];
 
   for (var i = 0, l = board.numCards; i < l; i++) {
@@ -112,9 +114,11 @@ function CanvasBoard(board) {
 
 function Card(i, board) {
   this.id = i;
-  this.string = "<canvas class='card' id = " + i + " width='50' height='50' onclick='game.peek(" + i + ")'></canvas> ";
+  var extraRow = Math.sqrt(board.numCards) === Math.floor(Math.sqrt(board.numCards)) ? 0 : 1;
+  var width = height = 350/(Math.floor(Math.sqrt(board.numCards)) + extraRow);
   
-
+  this.string = "<canvas class='card' id = " + i + " width='" + width + "' height='" + height + "' onclick='game.peek(" + i + ")'></canvas> ";
+  
   this.frontColor = function() {
     var value = board.values[this.id];
     var color = Colors[value];
@@ -142,3 +146,14 @@ function Card(i, board) {
   }();
 
 }
+
+function play() {
+  board = new Board(8);
+  game = new Game(board);
+}
+
+function reset() {
+  $('#board').empty();
+  play();
+}
+
