@@ -1,15 +1,27 @@
+/* apply a natural box layout model to all elements */
+/**, *:before, *:after {
+  -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
+ }
+*/
 body {
   margin: 10%;
 }
 
 #board {
-  text-align: center;
+  /*text-align: center;*/
+  width: 350px;
+  
 }
 
 .card {
   background: gray;
-  width: 50; 
-  height: 50;
+  border: 2px solid white;
+ /* border-left: 2px solid red;
+  border-right: 2px solid blue;
+  border-top: 2px solid red;
+  border-bottom: 2px solid blue;*/
+  float: left;
+
 }
 
 #reset {

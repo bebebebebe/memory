@@ -93,32 +93,37 @@ function Game(board) {
 }
 
 function CanvasBoard(board) {
-  var numCols = Math.floor(Math.sqrt(board.numCards));
   
-  var cardsString = '';
   var cards = [];
 
   for (var i = 0, l = board.numCards; i < l; i++) {
     card = new Card(i, board);
     cards.push(card);
-    cardsString += card.string;
-    if ((i+1)%numCols === 0) {
-      cardsString += "<br>";
-    }
+    document.getElementById('board').appendChild(card.canvas);
   }
 
   this.cards = cards;
-
-  $('#board').append(cardsString);
 }
 
 function Card(i, board) {
   this.id = i;
-  var extraRow = Math.sqrt(board.numCards) === Math.floor(Math.sqrt(board.numCards)) ? 0 : 1;
-  var width = height = 350/(Math.floor(Math.sqrt(board.numCards)) + extraRow);
+
+  var numCols = Math.floor(Math.sqrt(board.numCards));
+  var usableWidth = 350 - 4*numCols //border adds 2px on each side
+  var extraRow = Math.sqrt(board.numCards) === numCols ? 0 : 1;
+  var cardLength = usableWidth/(numCols + extraRow);
   
-  this.string = "<canvas class='card' id = " + i + " width='" + width + "' height='" + height + "' onclick='game.peek(" + i + ")'></canvas> ";
-  
+  var canvas = document.createElement('canvas');
+  canvas.id = i;
+  canvas.className = 'card';
+  canvas.height = canvas.width = cardLength;
+
+  $(canvas).click(function(){
+    game.peek(i);
+ });
+
+  this.canvas = canvas;
+
   this.frontColor = function() {
     var value = board.values[this.id];
     var color = Colors[value];
@@ -148,7 +153,7 @@ function Card(i, board) {
 }
 
 function play() {
-  board = new Board(8);
+  board = new Board(5);
   game = new Game(board);
 }
 
