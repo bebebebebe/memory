@@ -1,3 +1,4 @@
+;(function(exports) {
 
 function shuffle(o){ // from http://jsfromhell.com/array/shuffle
     for(var j, x, i = o.length; i; j = Math.floor(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
@@ -6,31 +7,42 @@ function shuffle(o){ // from http://jsfromhell.com/array/shuffle
 
 function Board(numCardTypes) {
   this.numCards = 2 * numCardTypes;
+  this.values = values();
 
-  var values = [];
-  for (var i = 0; i < numCardTypes; i++) {
-    values.push(i);
-    values.push(i);
-  }
-  values = shuffle(values);
-  
-  this.values = values;
+  // this.values = values().map (function(i) {
+  //   return [i, secondValues[i]];
+  // });
     
   this.match = function(i,j) {
-    if (values[i] === values[j]) {
-      return true;
-    } else {
-      return false;
-    }
+    return this.values[i] === this.values[j];
   }
+
+  function values() {
+    var values = [];
+    for (var i = 0; i < numCardTypes; i++) {
+      values.push(i, i);
+    }
+    return shuffle(values);
+  }
+
+  // function secondValues() {
+  //   var result = [];
+  //   var secondaries = [0,1,2,3,4,5,6,7,8];
+  //   for (var i = 0; i < numCardTypes; i++) {
+  //     var rand = secondaries[Math.floor(Math.random() * secondaries.length)];
+  //     result.push(rand);
+  //   }
+  //   return result;
+  // }
+
 }
 
 function Game(board) {
+  var canvasBoard = new CanvasBoard(board);
 
-  var canvas = new CanvasBoard(board);
-  function canvasCard(cardId) {
-    return canvas.cards[cardId];
-  }
+  // function canvasCard(cardId) {
+  //   return canvasBoard.cards[cardId];
+  // }
 
   var matchedCards = [];
   var cardId1 = -1;
@@ -42,10 +54,10 @@ function Game(board) {
     if (remaining) {
       if (cardId1 === -1 && cardId2 === -1) {
         cardId1 = cardId;
-        show(cardId1);
+        canvasBoard.actions.show(cardId1);
       } else if (cardId2 === -1 && cardId !== cardId1) {
         cardId2 = cardId;
-        show(cardId2);
+        canvasBoard.actions.show(cardId2);
         turn(cardId1, cardId2);
       } 
     }
@@ -55,45 +67,21 @@ function Game(board) {
     if (board.match(i, j)) {
       matchedCards.push(i);
       matchedCards.push(j);
-      var setTimeout = window.setTimeout(function() {
-        removal(i);
-        removal(j);
-      }, 500);
+      canvasBoard.actions.removal(i);
+      canvasBoard.actions.removal(j);
     } else {
-      var setTimeout = window.setTimeout(function() {
-        conceal(i);
-        conceal(j);
-      }, 500);
-
+      canvasBoard.actions.conceal(i);
+      canvasBoard.actions.conceal(j);
     }
     if (matchedCards.length === board.numCards) {
       gameOver();
     }
-    cardId1 = -1;
-    cardId2 = -1;
-    
+    cardId1 = cardId2 = -1;
   }
 
-  show = function(id) {
-    canvasCard(id).frontColor();
-  }
-
-  conceal = function(id) {
-    canvasCard(id).backColor();
-  }
-
-  removal = function(id) {
-    canvasCard(id).pageColor();
-  }
-
-  gameOver = function() {
-    console.log('game over');
-  }
-  
 }
 
 function CanvasBoard(board) {
-  
   var cards = [];
 
   for (var i = 0, l = board.numCards; i < l; i++) {
@@ -103,14 +91,40 @@ function CanvasBoard(board) {
   }
 
   this.cards = cards;
+
+  this.actions = {
+    show: function(id) {
+      cards[id].frontColor();
+    },
+
+    conceal: function(id) {
+      var setTemeout = window.setTimeout(function() {
+        cards[id].backColor();
+      }, 500);
+    },
+
+    removal: function(id) {
+      var setTimeout = window.setTimeout(function() {
+        cards[id].pageColor();
+        console.log('removal called');
+      }, 500);
+    }
+  };
+
+  gameOver = function() {
+    $('#board').empty();
+    $('#board').append("<p>game over!</p>");
+  }
+
+
 }
 
 function Card(i, board) {
   this.id = i;
 
   var numCols = Math.floor(Math.sqrt(board.numCards));
-  var usableWidth = 350 - 4*numCols //border adds 2px on each side
-  var extraRow = Math.sqrt(board.numCards) === numCols ? 0 : 1;
+  var usableWidth = 350 - 4*numCols // border adds 2px on each side
+  var extraRow = numCols === Math.sqrt(board.numCards) ? 0 : 1;
   var cardLength = usableWidth/(numCols + extraRow);
   
   var canvas = document.createElement('canvas');
@@ -118,28 +132,44 @@ function Card(i, board) {
   canvas.className = 'card';
   canvas.height = canvas.width = cardLength;
 
+  var ctx = canvas.getContext('2d');
+  function drawCircle(l, color) {
+    
+    ctx.beginPath();
+    ctx.arc(l/2, l/2, l/3, 0, Math.PI*2, true);
+    ctx.fillStyle = color;
+    ctx.fill();
+  }
+
+
   $(canvas).click(function(){
     game.peek(i);
- });
+  });
 
   this.canvas = canvas;
 
+
+
+
   this.frontColor = function() {
     var value = board.values[this.id];
-    var color = Colors[value];
+    var color = colors[value];
     $('#'+this.id).css('background', color);
+    drawCircle(cardLength, 'black');
   }
 
   this.backColor = function() {
     $('#'+this.id).css('background', 'gray');
+    ctx.clearRect(0,0,cardLength,cardLength);
   }
 
   this.pageColor = function() {
     $('#'+this.id).css('background', 'white');
+    ctx.clearRect(0,0,cardLength,cardLength);
+    console.log('pageColor called');
   }
 
-  var Colors = function() {
-    return {
+  var colors = {
     0: 'red', 
     1: 'blue', 
     2: 'green', 
@@ -147,18 +177,23 @@ function Card(i, board) {
     4: 'orange', 
     5: 'yellow', 
     6: 'purple', 
-    7: 'black'}
-  }();
-
+    7: 'black',
+    8: 'lightblue'
+    };
 }
 
-function play() {
-  board = new Board(5);
+exports.play = function(n) {
+  var board = new Board(n);
   game = new Game(board);
 }
 
-function reset() {
+exports.reset = function(n) {
   $('#board').empty();
-  play();
+  $('#reset').css('display', 'none');
+  var setTimeout = window.setTimeout(function() {
+    play(n);
+    $('#reset').css('display', 'inline-block');
+   }, 0);
 }
 
+}(this));

@@ -8,26 +8,53 @@ body {
 }
 
 #board {
-  /*text-align: center;*/
   width: 350px;
-  
+
 }
 
 .card {
   background: gray;
   border: 2px solid white;
- /* border-left: 2px solid red;
-  border-right: 2px solid blue;
-  border-top: 2px solid red;
-  border-bottom: 2px solid blue;*/
   float: left;
-
 }
 
 #reset {
   color: gray;
-  text-align: right;
-  font-weight: bold;
   font-family: helvetica;
   font-style: italic;
+  font-size: small;
+  display: inline-block;
+  
+}
+
+#reset:hover {
+  color: black;
+}
+
+#options {
+  color: gray;
+  font-size: small;
+  font-family: helvetica;
+  position: absolute;
+  right: 100px;
+  display: inline-block;
+}
+
+input:focus, textarea:focus, button:focus {
+    outline: none;
+}
+
+#pickNumber {
+  width: 50px;
+}
+
+#btn {
+  background: white;
+  border: 1px solid gray;
+  color: gray;
+}
+
+#btn:hover {
+  background: gray;
+  color: black;
 }
