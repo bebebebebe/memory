@@ -1,4 +1,5 @@
 Memory Card Game
+================
 
 Demo <a href='http://bebebebebe.herokuapp.com/memory'>here</a>.
 
@@ -11,7 +12,11 @@ The cards are made with HTML5 Canvas.
 In progress: currently card types are represented as colors, and only 9 colors are available. (So you can see the cards resize if you choose more than 9 card types, but you can't really play!)
 
 TO DO:
-1. Increase possible number of card types.
-  * Instead of associating each card type with one color, associate it with two colors, and draw a circle of the second color in the center of each card.
-2. Generalize game by allowing n-tuples rather than pairs of each card type.
-  * For example, if you choose triples, when playing you select three cards each turn rather than two.
+
+* Increase possible number of card types.
+  
+  Instead of associating each card type with one color, associate it with two colors, and draw a circle of the second color in the center of each card.
+
+* Generalize game by allowing n-tuples rather than pairs of each card type.
+  
+  For example, if you choose triples, when playing you select three cards each turn rather than two.
