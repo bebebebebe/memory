@@ -9,7 +9,7 @@ You can choose how many cards to use, and the cards are dynamically resized to f
 
 The cards are made with HTML5 Canvas.
 
-In progress: currently card types are represented as colors, and only 9 colors are available. (So you can see the cards resize if you choose more than 9 card types, but you can't really play!)
+In progress: currently card types are represented as colors, and only 9 colors are available. (So you can see the cards resize if you choose more than 9 card types, but you can't really play if you select a number greater than 9...)
 
 TO DO:
 
