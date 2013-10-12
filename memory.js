@@ -9,10 +9,6 @@ function Board(numCardTypes) {
   this.numCards = 2 * numCardTypes;
   this.values = values();
 
-  // this.values = values().map (function(i) {
-  //   return [i, secondValues[i]];
-  // });
-    
   this.match = function(i,j) {
     return this.values[i] === this.values[j];
   }
@@ -25,24 +21,11 @@ function Board(numCardTypes) {
     return shuffle(values);
   }
 
-  // function secondValues() {
-  //   var result = [];
-  //   var secondaries = [0,1,2,3,4,5,6,7,8];
-  //   for (var i = 0; i < numCardTypes; i++) {
-  //     var rand = secondaries[Math.floor(Math.random() * secondaries.length)];
-  //     result.push(rand);
-  //   }
-  //   return result;
-  // }
 
 }
 
 function Game(board) {
   var canvasBoard = new CanvasBoard(board);
-
-  // function canvasCard(cardId) {
-  //   return canvasBoard.cards[cardId];
-  // }
 
   var matchedCards = [];
   var cardId1 = -1;
@@ -155,18 +138,18 @@ function Card(i, board) {
     var value = board.values[this.id];
     var color = colors[value];
     $('#'+this.id).css('background', color);
-    drawCircle(cardLength, 'black');
+    //drawCircle(cardLength, 'black');
   }
 
   this.backColor = function() {
     $('#'+this.id).css('background', 'gray');
-    ctx.clearRect(0,0,cardLength,cardLength);
+    //ctx.clearRect(0,0,cardLength,cardLength);
   }
 
   this.pageColor = function() {
     $('#'+this.id).css('background', 'white');
     ctx.clearRect(0,0,cardLength,cardLength);
-    console.log('pageColor called');
+    //console.log('pageColor called');
   }
 
   var colors = {
