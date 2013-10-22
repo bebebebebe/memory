@@ -1,7 +1,7 @@
 Memory Card Game
 ================
 
-Demo <a href='http://jsfiddle.net/bebebebebe/3cvg2/1/'>here</a>.
+Demo <a href='http://bebebebebe.herokuapp.com/memory'>here</a>.
 
 JavaScript implementation of the classic memory card game.
 
