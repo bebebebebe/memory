@@ -18,7 +18,7 @@ function pairs(n) { // return array of pairs of integers between 0 and n
 function Board(numCardTypes) {
   this.numCards = 2 * numCardTypes;
   this.values = values();
-  this.patterns = patterns(numCardTypes);
+  this.patterns = patterns();
 
   this.match = function(i,j) {
     return this.values[i] === this.values[j];
@@ -33,7 +33,7 @@ function Board(numCardTypes) {
   }
 
   // n is a positive integer <= 81
-  function patterns(n) { // return exactly n pairs of integers between 0 and 8
+  function patterns() { // return shuffled array of pairs of integers between 0 and 8
     return shuffle(pairs(8));
   }
 
