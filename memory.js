@@ -114,7 +114,6 @@ function CanvasBoard(board) {
     $('#board').append("<p>game over!</p>");
   }
 
-
 }
 
 function Card(i, board) {
